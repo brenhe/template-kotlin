@@ -8,15 +8,9 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.nexus.publish)
 
-    // Firebase Google Services
-    id("com.google.gms.google-services")
-        version "4.4.4"
-        apply false
-
-    // Firebase Crashlytics
-    id("com.google.firebase.crashlytics")
-        version "3.0.3"
-        apply false
+    // Firebase
+    id("com.google.gms.google-services") version "4.4.4" apply false
+    id("com.google.firebase.crashlytics") version "3.0.3" apply false
 
     cleanup
     base
