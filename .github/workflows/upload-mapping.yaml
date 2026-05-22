@@ -69,10 +69,16 @@ jobs:
           --app ${{ secrets.FIREBASE_APP_ID }} \
           --groups "testers"
 
+      # - name: Upload mapping file to Crashlytics
+      #   env:
+      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      #   run: |
+      #     firebase crashlytics:symbols:upload \
+      #     --app=${{ secrets.FIREBASE_APP_ID }} \
+      #     app/build/outputs/mapping/release/
+
       - name: Upload mapping file to Crashlytics
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
-          firebase crashlytics:symbols:upload \
-          --app=${{ secrets.FIREBASE_APP_ID }} \
-          app/build/outputs/mapping/release/
+          ./gradlew app:uploadCrashlyticsMappingFileRelease
