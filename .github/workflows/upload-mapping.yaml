@@ -61,4 +61,4 @@ jobs:
         run: |
           firebase crashlytics:symbols:upload \
           --app=${{ secrets.FIREBASE_APP_ID }} \
-          app/build/outputs/mapping/release/mapping.txt
+          app/build/outputs/mapping/release/
