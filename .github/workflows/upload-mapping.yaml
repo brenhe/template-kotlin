@@ -31,6 +31,20 @@ jobs:
           ls -R app/build/outputs/
           ls -R app/build/outputs/mapping/
 
+      - name: Find Crashlytics mapping file ID XML
+        run: |
+          echo "Searching for Crashlytics mappingfileid XML..."
+
+          find app/build -iname "*mappingfileid*" || true
+
+          echo ""
+          echo "Detailed XML search:"
+          
+          find app/build \
+            -type f \
+            \( -iname "*.xml" -o -iname "*crashlytics*" \) \
+            | sort || true
+
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
