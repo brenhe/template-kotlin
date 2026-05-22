@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: app/build/outputs/apk/release/app-release.apk
+          path: app/build/outputs/apk/release/app-release-unsigned.apk
 
       - name: Upload Mapping artifact
         uses: actions/upload-artifact@v4
@@ -51,7 +51,7 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           firebase appdistribution:distribute \
-          app/build/outputs/apk/release/app-release.apk \
+          app/build/outputs/apk/release/app-release-unsigned.apk \
           --app ${{ secrets.FIREBASE_APP_ID }} \
           --groups "testers"
 
