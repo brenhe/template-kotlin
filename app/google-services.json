@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "196849409921",
+    "project_id": "mapping-2be9a",
+    "storage_bucket": "mapping-2be9a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:196849409921:android:aed9822fcd88dbb8ce5280",
+        "android_client_info": {
+          "package_name": "com.example.mappingtest"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB46QAkiI1soasAEnri2GFQ43gMyH6SBsI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
