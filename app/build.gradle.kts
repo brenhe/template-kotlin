@@ -4,36 +4,56 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     id("com.android.application")
     kotlin("android")
+
+    // Firebase
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
-val APP_VERSION_NAME : String by project
-val APP_VERSION_CODE : String by project
-val APP_ID : String by project
+val APP_VERSION_NAME: String by project
+val APP_VERSION_CODE: String by project
+val APP_ID: String by project
 
 android {
+
+    namespace = APP_ID
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
 
     defaultConfig {
-        minSdk = libs.versions.min.sdk.version.get().toInt()
-        namespace = APP_ID
 
         applicationId = APP_ID
+        minSdk = libs.versions.min.sdk.version.get().toInt()
+
         versionCode = APP_VERSION_CODE.toInt()
         versionName = APP_VERSION_NAME
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        testInstrumentationRunner =
+            "androidx.test.runner.AndroidJUnitRunner"
     }
+
     buildFeatures {
         viewBinding = true
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
     buildTypes {
+
         getByName("release") {
-            isMinifyEnabled = false
+
+            // NECESSÁRIO para gerar mapping.txt
+            isMinifyEnabled = true
+
+            // Recomendado junto com minify
+            isShrinkResources = true
+
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
+                getDefaultProguardFile(
+                    "proguard-android-optimize.txt"
+                ),
                 "proguard-rules.pro"
             )
         }
@@ -66,6 +86,7 @@ tasks.withType<KotlinCompile>().configureEach {
 }
 
 dependencies {
+
     implementation(projects.libraryAndroid)
     implementation(projects.libraryCompose)
     implementation(projects.libraryKotlin)
@@ -73,6 +94,23 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraint.layout)
     implementation(libs.androidx.core.ktx)
+
+    // Firebase BoM
+    implementation(
+        platform(
+            "com.google.firebase:firebase-bom:34.13.0"
+        )
+    )
+
+    // Firebase Analytics
+    implementation(
+        "com.google.firebase:firebase-analytics"
+    )
+
+    // Firebase Crashlytics
+    implementation(
+        "com.google.firebase:firebase-crashlytics"
+    )
 
     testImplementation(libs.junit)
 
