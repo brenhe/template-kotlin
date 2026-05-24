@@ -8,6 +8,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -23,8 +24,29 @@ jobs:
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
 
+      - name: Decode Android Keystore
+        run: |
+          mkdir -p keystore
+
+          echo "${{ secrets.KEYSTORE_BASE64 }}" \
+            | base64 -d \
+            > keystore/release.jks
+
       - name: Build Release APK
-        run: ./gradlew assembleRelease
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          ./gradlew assembleRelease
+
+      - name: Verify APK signature
+        run: |
+          BUILD_TOOLS=$(ls $ANDROID_HOME/build-tools | sort -V | tail -n 1)
+
+          $ANDROID_HOME/build-tools/$BUILD_TOOLS/apksigner verify \
+            --verbose \
+            app/build/outputs/apk/release/app-release.apk
 
       - name: Verify generated files
         run: |
@@ -39,7 +61,7 @@ jobs:
 
           echo ""
           echo "Detailed XML search:"
-          
+
           find app/build \
             -type f \
             \( -iname "*.xml" -o -iname "*crashlytics*" \) \
@@ -49,7 +71,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: release-apk
-          path: app/build/outputs/apk/release/app-release-unsigned.apk
+          path: app/build/outputs/apk/release/app-release.apk
 
       - name: Upload Mapping artifact
         uses: actions/upload-artifact@v4
@@ -65,20 +87,14 @@ jobs:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
         run: |
           firebase appdistribution:distribute \
-          app/build/outputs/apk/release/app-release-unsigned.apk \
+          app/build/outputs/apk/release/app-release.apk \
           --app ${{ secrets.FIREBASE_APP_ID }} \
           --groups "testers"
 
-      # - name: Upload mapping file to Crashlytics
-      #   env:
-      #     FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-      #   run: |
-      #     firebase crashlytics:symbols:upload \
-      #     --app=${{ secrets.FIREBASE_APP_ID }} \
-      #     app/build/outputs/mapping/release/
-
       - name: Upload mapping file to Crashlytics
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           ./gradlew app:uploadCrashlyticsMappingFileRelease

@@ -40,14 +40,51 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
 
+    /**
+     * Release signing
+     */
+    signingConfigs {
+
+        create("release") {
+
+            /**
+             * Caminho do keystore
+             * Será criado pela pipeline GitHub Actions
+             */
+            storeFile = file("../keystore/release.jks")
+
+            /**
+             * Secrets vindos do GitHub Actions
+             */
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+
+            /**
+             * Compatibilidade Android antigo
+             */
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    }
+
     buildTypes {
 
         getByName("release") {
 
-            // NECESSÁRIO para gerar mapping.txt
+            /**
+             * APK assinado
+             */
+            signingConfig = signingConfigs.getByName("release")
+
+            /**
+             * Necessário para mapping.txt
+             */
             isMinifyEnabled = true
 
-            // Recomendado junto com minify
+            /**
+             * Recomendado junto com minify
+             */
             isShrinkResources = true
 
             proguardFiles(
