@@ -1,4 +1,4 @@
-package com.ncorti.kotlin.template.app
+package com.example.mappingtest
 
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
