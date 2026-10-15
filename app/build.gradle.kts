@@ -132,9 +132,6 @@ dependencies {
     implementation(libs.androidx.constraint.layout)
     implementation(libs.androidx.core.ktx)
 
-    // Excel support for monthly .xlsx files
-    implementation("org.apache.poi:poi-ooxml:5.2.5")
-
     // Firebase BoM
     implementation(
         platform(
