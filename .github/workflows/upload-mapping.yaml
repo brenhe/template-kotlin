@@ -30,6 +30,22 @@ jobs:
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
 
+      - name: Decode Android Keystore
+        run: |
+          mkdir -p keystore
+
+          echo "${{ secrets.KEYSTORE_BASE64 }}" \
+            | base64 -d \
+            > keystore/release.jks
+
+      - name: Build Release APK
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          ./gradlew assembleRelease
+
       - name: Verify Gradle build outputs
         if: always()
         run: |
@@ -95,23 +111,7 @@ jobs:
         with:
           name: crashlytics-mapping-id-xml
           path: crashlytics-xml/
-          if-no-files-found: warn
-
-      - name: Decode Android Keystore
-        run: |
-          mkdir -p keystore
-
-          echo "${{ secrets.KEYSTORE_BASE64 }}" \
-            | base64 -d \
-            > keystore/release.jks
-
-      - name: Build Release APK
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          ./gradlew assembleRelease
+          if-no-files-found: warn          
 
       - name: Upload Crashlytics mapping ID XML
         uses: actions/upload-artifact@v4
