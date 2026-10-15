@@ -129,11 +129,12 @@ class ExcelInputParser {
         return -1
     }
 
+
     private fun normalizeHeader(value: String): String {
         return value
             .trim()
             .lowercase()
-            .replace("[\s\-]+".toRegex(), "_")
+            .replace("""[\s-]+""".toRegex(), "_")
             .replace("[^a-z0-9_]".toRegex(), "")
+            }
     }
-}
