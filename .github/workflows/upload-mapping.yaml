@@ -29,6 +29,24 @@ jobs:
 
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
+
+      - name: Verify Gradle build outputs
+        if: always()
+        run: |
+          echo "Gradle build status:"
+          find . -type d -path "*/build/outputs" -print
+
+          echo ""
+          echo "APK files:"
+          find . -type f -name "*.apk" -print
+
+          echo ""
+          echo "Mapping files:"
+          find . -type f -name "mapping.txt" -print
+
+          echo ""
+          echo "Crashlytics XML files:"
+          find . -type f -iname "*mappingfileid*.xml" -print
 #ajuste incluido#
       - name: Inspect build output directories
         if: always()
