@@ -111,13 +111,6 @@ jobs:
         with:
           name: crashlytics-mapping-id-xml
           path: crashlytics-xml/
-          if-no-files-found: warn          
-
-      - name: Upload Crashlytics mapping ID XML
-        uses: actions/upload-artifact@v4
-        with:
-          name: crashlytics-mapping-id-xml
-          path: app/build/**/com_google_firebase_crashlytics_mappingfileid.xml
           if-no-files-found: warn
 
       - name: Verify APK signature
