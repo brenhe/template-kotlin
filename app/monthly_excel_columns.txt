@@ -1,0 +1,24 @@
+Use these exact column names in your .xlsx file:
+
+object
+value
+date
+
+Optional columns you can also include:
+status
+category
+description
+type
+
+Example sheet:
+object,value,date,status
+salary,3500,2026-09-01,paid
+rent,1200,2026-09-02,pending
+food,480,2026-09-04,paid
+
+Accepted aliases:
+object -> obj, entity, field, name
+value -> input_value, amount, text
+date -> input_date, created_at, updated_at
+status -> state
+category -> group

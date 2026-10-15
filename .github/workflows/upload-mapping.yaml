@@ -23,6 +23,37 @@ jobs:
 
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
+#ajuste incluido#
+      - name: Find and collect Crashlytics mapping ID XML
+        shell: bash
+        run: |
+          echo "Searching for Crashlytics mappingfileid XML..."
+
+          find app/build -type f \
+            -iname "*mappingfileid*.xml" \
+            -print
+
+          mkdir -p crashlytics-xml
+
+          find app/build -type f \
+            -iname "*mappingfileid*.xml" \
+            -exec cp --parents {} crashlytics-xml/ \;
+
+          echo ""
+          echo "Collected XML files:"
+          find crashlytics-xml -type f -print
+
+          echo ""
+          echo "XML contents:"
+          find crashlytics-xml -type f -name "*.xml" \
+            -exec sh -c 'echo "--- $1"; cat "$1"; echo' _ {} \;
+
+      - name: Upload Crashlytics mapping ID XML artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crashlytics-mapping-id-xml
+          path: crashlytics-xml/
+          if-no-files-found: warn
 
       - name: Decode Android Keystore
         run: |
@@ -39,6 +70,13 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           ./gradlew assembleRelease
+
+      - name: Upload Crashlytics mapping ID XML
+        uses: actions/upload-artifact@v4
+        with:
+          name: crashlytics-mapping-id-xml
+          path: app/build/**/com_google_firebase_crashlytics_mappingfileid.xml
+          if-no-files-found: warn
 
       - name: Verify APK signature
         run: |
