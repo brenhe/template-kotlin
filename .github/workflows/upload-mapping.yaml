@@ -30,6 +30,24 @@ jobs:
       - name: Grant execute permission to Gradle
         run: chmod +x ./gradlew
 #ajuste incluido#
+      - name: Inspect build output directories
+        if: always()
+        run: |
+          echo "Current directory:"
+          pwd
+
+          echo ""
+          echo "Repository root:"
+          ls -la
+
+          echo ""
+          echo "Build directories:"
+          find . -type d -name build -print
+
+          echo ""
+          echo "Crashlytics mapping ID XML files:"
+          find . -type f -iname "*mappingfileid*.xml" -print
+
       - name: Find and collect Crashlytics mapping ID XML
         shell: bash
         run: |
