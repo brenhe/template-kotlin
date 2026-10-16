@@ -10,6 +10,11 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
+// Desabilita o envio automático do mapping para o Firebase Crashlytics
+firebaseCrashlytics {
+    mappingFileUploadEnabled = false
+}
+
 val APP_VERSION_NAME: String by project
 val APP_VERSION_CODE: String by project
 val APP_ID: String by project
@@ -47,22 +52,12 @@ android {
 
         create("release") {
 
-            /**
-             * Caminho do keystore
-             * Será criado pela pipeline GitHub Actions
-             */
             storeFile = file("../keystore/release.jks")
 
-            /**
-             * Secrets vindos do GitHub Actions
-             */
             storePassword = System.getenv("KEYSTORE_PASSWORD")
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
 
-            /**
-             * Compatibilidade Android antigo
-             */
             enableV1Signing = true
             enableV2Signing = true
         }
@@ -78,12 +73,13 @@ android {
             signingConfig = signingConfigs.getByName("release")
 
             /**
-             * Necessário para mapping.txt
+             * R8: redução e ofuscação do código
              */
-            isMinifyEnabled = false
+            isMinifyEnabled = true
 
             /**
-             * Recomendado junto com minify
+             * Remoção de recursos não utilizados
+             * Requer isMinifyEnabled = true
              */
             isShrinkResources = true
 
