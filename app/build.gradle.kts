@@ -73,7 +73,7 @@ android {
             /**
              * R8: redução e ofuscação do código
              */
-            isMinifyEnabled = false
+            isMinifyEnabled = true
 
             /**
              * Remoção de recursos não utilizados
