@@ -164,10 +164,10 @@ jobs:
           --app ${{ secrets.FIREBASE_APP_ID }} \
           --groups "testers"
 
-      - name: Upload mapping file to Crashlytics
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: |
-          ./gradlew app:uploadCrashlyticsMappingFileRelease
+      # - name: Upload mapping file to Crashlytics
+      #   env:
+      #     KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      #     KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      #     KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      #   run: |
+      #     ./gradlew app:uploadCrashlyticsMappingFileRelease
