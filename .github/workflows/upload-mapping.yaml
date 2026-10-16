@@ -61,6 +61,10 @@ jobs:
           grep -n -A 8 -B 3 'onCreate\$lambda\$0\|ExternalSyntheticLambda' \
             app/build/outputs/mapping/release/mapping.txt || true
 
+          echo "=== Classes e métodos da aplicação ==="
+          grep -n -A 12 -B 2 \ 'com\.example\.mappingtest\.MainActivity\$\$ExternalSyntheticLambda\|onCreate\$lambda\$0' \
+            app/build/outputs/mapping/release/mapping.txt || true
+
       - name: Verify Gradle build outputs
         if: always()
         run: |
