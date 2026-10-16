@@ -55,7 +55,11 @@ jobs:
 
           echo "=== Configuração R8 ==="
           grep -nE 'isMinifyEnabled|isShrinkResources|dontobfuscate|keep' \
-            app/build.gradle.kts app/proguard-rules.pro || true
+            app/build.gradle.kts app/proguard-rules.pro || true         
+
+          echo "=== Mapping do método que gera o crash ==="
+          grep -n -A 8 -B 3 'onCreate\$lambda\$0\|ExternalSyntheticLambda' \
+            app/build/outputs/mapping/release/mapping.txt || true
 
       - name: Verify Gradle build outputs
         if: always()
