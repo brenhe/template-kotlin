@@ -80,7 +80,7 @@ android {
             /**
              * Necessário para mapping.txt
              */
-            isMinifyEnabled = true
+            isMinifyEnabled = false
 
             /**
              * Recomendado junto com minify
