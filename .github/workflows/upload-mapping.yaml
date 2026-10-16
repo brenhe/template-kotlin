@@ -46,6 +46,17 @@ jobs:
         run: |
           ./gradlew assembleRelease
 
+      - name: Verify R8 obfuscation
+        run: |
+          echo "=== Mapping da MainActivity ==="
+          grep -A 20 -B 2 \
+            'com.example.mappingtest.MainActivity ->' \
+            app/build/outputs/mapping/release/mapping.txt || true
+
+          echo "=== Configuração R8 ==="
+          grep -nE 'isMinifyEnabled|isShrinkResources|dontobfuscate|keep' \
+            app/build.gradle.kts app/proguard-rules.pro || true
+
       - name: Verify Gradle build outputs
         if: always()
         run: |
