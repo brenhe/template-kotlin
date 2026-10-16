@@ -10,11 +10,6 @@ plugins {
     id("com.google.firebase.crashlytics")
 }
 
-// Desabilita o envio automático do mapping para o Firebase Crashlytics
-firebaseCrashlytics {
-    mappingFileUploadEnabled = false
-}
-
 val APP_VERSION_NAME: String by project
 val APP_VERSION_CODE: String by project
 val APP_ID: String by project
@@ -24,6 +19,9 @@ android {
     namespace = APP_ID
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
 
+    firebaseCrashlytics {
+        mappingFileUploadEnabled = false
+    }
     defaultConfig {
 
         applicationId = APP_ID
