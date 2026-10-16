@@ -79,7 +79,7 @@ android {
              * Remoção de recursos não utilizados
              * Requer isMinifyEnabled = true
              */
-            isShrinkResources = true
+            isShrinkResources = false
 
             proguardFiles(
                 getDefaultProguardFile(
